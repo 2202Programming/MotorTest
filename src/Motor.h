@@ -10,13 +10,15 @@
 #include "WPILib.h"
 
 
-class Motor: public IControl {
+class Motor {
 public:
 	Motor();
 	virtual ~Motor();
 	void TeleopInit();
 	void TeleopPeriodic();
-	void setDrive(double speedL,double speedR);
+	void setDrive(float speedL, float speedR);
+	float leftSpeed;
+	float rightSpeed;
 
 protected:
 	Spark *frontLeft;
@@ -24,9 +26,6 @@ protected:
 	Spark *backLeft;
 	Spark *backRight;
 
-	double writeSpeedFL;
-	double writeSpeedFR;
-	double writeSpeedBL;
-	double writeSpeedBR;
+
 };
 

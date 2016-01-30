@@ -7,10 +7,10 @@
 
 #include <Motor.h>
 
-#define MOTORFL 0
-#define MOTORFR 2
-#define MOTORBL 1
-#define MOTORBR 3
+#define MOTORFL 1
+#define MOTORBL 2
+#define MOTORFR 3
+#define MOTORBR 4
 
 Motor::Motor() {
 	frontLeft = new Spark(MOTORFL);
@@ -18,10 +18,8 @@ Motor::Motor() {
 	backLeft = new Spark(MOTORBL);
 	backRight = new Spark(MOTORBR);
 
-	writeSpeedFL = 0.1;
-	writeSpeedFR = 0.1;
-	writeSpeedBL = 0.1;
-	writeSpeedBR = 0.1;
+	rightSpeed = 0.0;
+	leftSpeed = 0.0;
 }
 
 Motor::~Motor() {
@@ -35,16 +33,21 @@ void Motor::TeleopInit() {
 }
 
 void Motor::TeleopPeriodic() {
-	frontLeft->Set(writeSpeedFL);
-	frontRight->Set(writeSpeedFR);
-	backLeft->Set(writeSpeedBL);
-	backRight->Set(writeSpeedBR);
+	/*frontLeft->Set(0.2);
+	backLeft->Set(0.2);
+	frontRight->Set(-0.2);
+	backRight->Set(-0.2); */
+	SmartDashboard::PutNumber("Left Speed", leftSpeed);
+	SmartDashboard::PutNumber("Right Speed", rightSpeed);
+	frontLeft->Set(leftSpeed);
+	backLeft->Set(leftSpeed);
+	frontRight->Set(rightSpeed);
+	backRight->Set(rightSpeed);
 }
 
-void Motor::setDrive(double speedL, double speedR) {
-	writeSpeedFL = speedL;
-	writeSpeedFR = speedR;
-	writeSpeedBL = speedL;
-	writeSpeedBR = speedR;
+void Motor::setDrive(float speedL, float speedR) {
+	SmartDashboard::PutBoolean("Set Drive run", true);
+	leftSpeed = speedL;
+	rightSpeed = -speedR;
 }
 

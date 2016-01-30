@@ -9,16 +9,26 @@
 class Robot: public IterativeRobot {
 private:
 	LiveWindow *lw = LiveWindow::GetInstance();
-	IControl *controllers[CONTROLLERS];
+	//IControl *controllers[CONTROLLERS];
+
+	NewXboxController *xbox;
+	/*Spark *leftFront;
+	Spark *leftBack;
+	Spark *rightFront; // Negative Input
+	Spark *rightBack; //Negative Input */
+
+	Motor *m;
+	Drive *d;
 
 	void RobotInit() {
-		for (int i = 0; i < CONTROLLERS; i++) {
-			controllers[i] = NULL;
-		}
+		xbox = NewXboxController::getInstance();
+		/*leftFront = new Spark(1);
+		leftBack = new Spark(2);
+		rightFront = new Spark(3);
+		rightBack = new Spark(4);*/
 
-		controllers[0] = NewXboxController::getInstance();
-		controllers[1] = new Drive();
-		controllers[2] = new Motor();
+		d = new Drive();
+		m = d->motor;
 	}
 
 	void AutonomousInit() {
@@ -28,20 +38,47 @@ private:
 	}
 
 	void TeleopInit() {
-		for (int i = 0; i < CONTROLLERS; i ++) {
-			controllers[i]->TeleopInit();
-		}
+		/*leftFront->Set(0);
+		leftBack->Set(0);
+		rightFront->Set(0);
+		rightBack->Set(0); */
+
+		d->TeleopInit();
+		m->TeleopInit();
 	}
 
 	void TeleopPeriodic() {
-		for (int i = 0; i < CONTROLLERS; i++) {
-			controllers[i]->TeleopPeriodic();
-		}
+		xbox->update();
+
+		/*if (xbox->isXHeld()) {
+			leftFront->Set(0.2);
+			leftBack->Set(0.2);
+			rightFront->Set(-0.2);
+			rightBack->Set(-0.2);
+		} else if (xbox->isBHeld()) {
+			leftFront->Set(-0.2);
+			leftBack->Set(-0.2);
+			rightFront->Set(0.2);
+			rightBack->Set(0.2);
+		}*/
+
+		/*leftFront->Set(0.2);
+		leftBack->Set(0.2);
+		rightFront->Set(-0.2);
+		rightBack->Set(-0.2);
+	*/
+		SmartDashboard::PutNumber("Xleft", xbox->getAxisLeftX());
+		SmartDashboard::PutNumber("Yleft", xbox->getAxisLeftY());
+		m->leftSpeed = .5;
+		m->rightSpeed = .5;
+		d->TeleopPeriodic();
+		m->TeleopPeriodic();
 	}
 
 	void TestPeriodic() {
 		lw->Run();
 	}
-};
+}
+;
 
 START_ROBOT_CLASS(Robot)

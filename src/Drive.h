@@ -13,7 +13,7 @@
 #ifndef SRC_DRIVE_H_
 #define SRC_DRIVE_H_
 
-class Drive: public IControl {
+class Drive {
 public:
 	Drive();
 	virtual ~Drive();
@@ -21,8 +21,12 @@ public:
 	void TeleopInit();
 	void TeleopPeriodic();
 
-	void readXbox();
+	void readXboxTank();
+	void readXboxArcadeT();
+	void readXboxArcadeD();
 	void updateMotors();
+
+	float acceleration(float newS, float oldS);
 
 	Motor *motor;
 	NewXboxController *xbox;
